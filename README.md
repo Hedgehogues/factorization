@@ -1,3 +1,100 @@
+# Factorization of a number by a given set
+
+This repository is an algorithm that allows you to decompose the number of a given set of numbers. For example, we
+we have a set of numbers `1, 2, 2, 3, 4, 6`. How many ways can we get the number `5`? Obviously:
+
+    1, 4
+    1, 2, 2
+    2, 3
+    2, 3
+    
+Thus, we went through all possible solutions. Please note that one of the solutions is repeated. It is important
+take into account and avoid unnecessary repetitions.
+
+# Baseline
+
+Let's match the bitmask to the set of numbers:
+
+    [0, 0, 1, 0]
+    
+Then, in order to get a solution, it is enough to go through all the bit masks. The complexity of this algorithm will be: $O(2^N)$, where
+$N$ - the size of the mask. Obviously, already with 22 elements, you will have to wait a very long time to get all the solutions.
+
+![2N.png](docs/2N.png)
+
+It should be noted here that any solution can be found rather quickly. But if we want to make sure there are no solutions,
+to prove that it is unique or to find everything, the execution time of the algorithm will be delayed.
+
+Consider an applied problem that I solved in my practice.
+
+### Task
+
+May we have a purchase. We know the total price, i.e. the total amount of all goods and the price of each product. At the same time, the client
+returned some of the goods. It is required to understand which of the goods the customer bought.
+
+### Continuation
+
+In some cases, we want to understand how many solutions this task has?
+
+### Decision
+
+There are products:
+
+![1.png](docs/1.png)
+
+Each of them is worth something:
+
+![2.png](docs/2.png)
+
+Also there is a departure and return:
+
+![3.png](docs/3.png)
+
+There is a solution:
+
+![4.png](docs/4.png)
+
+Including and excluding everything in turn in a solution, we can find all possible solutions.
+
+
+# Optimization - 1. (Backpack task)
+
+You can read more [here](https://neerc.ifmo.ru/wiki/index.php?title=%D0%97%D0%B0%D0%B4%D0%B0%D1%87%D0%B0_%D0%BE_%D1%80%D1%8E%D0%BA%D0%B7%D0%B0%D0%BA%D0%B5)
+In this case, the idea is used that it is not necessary to fill in the whole matrix, but it is enough to go from the final decision,
+those. and recursively iterate over all solutions. Thus, we will answer all questions of the problem. The problem with this approach is
+that we cannot do this iteratively, which means we will have to store all the decisions in memory, and there may be quite a lot of them.
+
+It is important to note that this task is a special case of the backpack problem. The task of the backpack looks like this:
+
+![5.png](docs/5.png)
+
+There is a backpack, it has a capacity, and we also want to collect in it items of maximum value so that they all
+fit in. At the same time, each item has its cost and weight (restriction). Potentially constraints in a task can
+be more than one.
+
+In our case, everything is easier. First, the weight of the backpack and the limit in this case are the same.
+ 
+![6.png](docs/6.png)
+
+Secondly, in contrast to the backpack problem, we need to make up from our objects exactly the maximum weight of the backpack.
+Do not forget that the weight coincides with the restriction, or say that such a solution does not exist.
+
+Notice how the task of a backpack is similar to the search for masks.
+
+# Optimization - 2
+
+In order to generate solutions iteratively, it is proposed to rank the elements. In this case it is possible, as long as
+limitation and weight are the same. Then, at each step, we will fill the backpack, iterating from the maximum element to
+minimum and will recalculate the remainder. As soon as the balance is less than 0, we return to the previous step and continue the search.
+If the remainder is exactly 0, then we return the solution, and then, from the same place, we continue the search.
+
+Note that this solution works about 2 times longer than solving the backpack problem. At the same time, we can give
+answers iteratively.
+
+# Installation (python3.7 +)
+
+    pip install -r requirements
+
 # Факторизация числа по заданному множеству
 
 Данный репозиторий представляет собой алгоритм, позволяющий разложить число по заданному множеству чисел. Например, мы 
